@@ -335,7 +335,7 @@ class Qwen2_VL(lmms):
                     # if total_frames > 0 and total_frames - 1 not in indices:
                     #     indices = np.append(indices, total_frames - 1)
                     #     indices = np.unique(indices) # Ensure uniqueness again
-
+                    print(len(indices))
                     # Limit to max_num_frames if appending last frame exceeded it
                     if len(indices) > self.max_num_frames:
                         # This might happen if linspace already picked close indices including the end

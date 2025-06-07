@@ -53,7 +53,7 @@ def convert_time_to_frame(time_in_seconds, fps):
 
 
 def videoruler_doc_to_visual(doc):
-    cache_dir = os.path.join(base_cache_dir, cache_name)
+    cache_dir = os.path.join(base_cache_dir, cache_name,'datasets--ruili0--video_testing_dataset/snapshots/987df245a318b0cd087e50e6dc8e609004f234a6')
     video_path = doc["video"] 
     video_path = os.path.join(cache_dir, video_path)
     if os.path.exists(video_path):
@@ -153,7 +153,7 @@ def videoruler_process_results(doc, results):
     
     length=doc['length']
     video=doc['video']
-    data_dict = {"index": doc["index"] ,"length":length,"video":video, "task_type": task_type, "pred_answer": pred_ans, "answer": doc["answer"]}
+    data_dict = {"index": doc["index"] ,"length":length,"video":video, "task_type": task_type, "pred_answer": pred_ans, 'pred':pred,"answer": doc["answer"]}
 
     return {f"videoruler_perception_score": data_dict}
 
