@@ -147,7 +147,7 @@ def videoruler_process_results(doc, results):
     if task_type=="QA":
         pred_ans = extract_characters_regex(pred)
     elif task_type=="OCR":
-        pred_ans = pred.strip()
+        pred_ans = re.sub(r'^\.+|\.+$', '', pred.replace("The answer is ","").split(" ")[0].split(":")[0].strip()) if pred else pred
     # gt_ans = doc["answer"].lower().strip().replace(".", "")
 
     
@@ -177,7 +177,18 @@ def videoruler_aggregate_results(results):
         length=result['length']
         key = f"{length}_{task_type}"
         category2score[key]["answered"] += 1
-        category2score[key]["correct"] += result["pred_answer"] == result["answer"]
+        category2score[key]["correct"] += result["pred_answer"].lower() == result["answer"].lower()
+    for  cur_key in category2score:
+        length,task_type=cur_key.split("_")
+        eval_logger.info(f"Evaluation on Video Length: {str(length)} and Task: {task_type}: {100 * category2score[cur_key]['correct'] / category2score[cur_key]['answered'] if category2score[cur_key]['answered'] > 0 else 0 : .1f}%")
+    for cur_length in LENGTH:
+        total_correct = 0
+        total_answered = 0
+        for k, v in category2score.items():
+            if str(cur_length) in k:
+                total_correct += v["correct"]
+                total_answered += v["answered"]
+        eval_logger.info(f"Evaluation on Video Length: {str(cur_length)}: {100 * total_correct / total_answered if total_answered > 0 else 0 : .1f}%")
 
     
     total_correct = 0
