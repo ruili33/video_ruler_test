@@ -14,7 +14,7 @@ from loguru import logger as eval_logger
 
 from lmms_eval.tasks._task_utils.file_utils import generate_submission_file
 
-LENGTH = [1,30,60,120,180,300,600,1200]
+LENGTH = [1,30,60,120,180,300,600,1200,1800,3600]
 TASK_CATEGORIES = ["QA","OCR"]
 
 
@@ -53,7 +53,7 @@ def convert_time_to_frame(time_in_seconds, fps):
 
 
 def videoruler_doc_to_visual(doc):
-    cache_dir = os.path.join(base_cache_dir, cache_name,'datasets--ruili0--video_testing_dataset/snapshots/987df245a318b0cd087e50e6dc8e609004f234a6')
+    cache_dir = os.path.join(base_cache_dir, cache_name,'datasets--ruili0--video_testing_dataset/snapshots/c0825c7fa6047b11b51e68630e45f81730bec169')
     video_path = doc["video"] 
     video_path = os.path.join(cache_dir, video_path)
     if os.path.exists(video_path):
@@ -185,12 +185,11 @@ def videoruler_aggregate_results(results):
         total_correct = 0
         total_answered = 0
         for k, v in category2score.items():
-            if str(cur_length) in k:
+            if str(cur_length) == k.split("_")[0]:
                 total_correct += v["correct"]
                 total_answered += v["answered"]
         eval_logger.info(f"Evaluation on Video Length: {str(cur_length)}: {100 * total_correct / total_answered if total_answered > 0 else 0 : .1f}%")
 
-    
     total_correct = 0
     total_answered = 0
     for k, v in category2score.items():
