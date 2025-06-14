@@ -322,8 +322,14 @@ class LongVA(lmms):
         else:
             vr = VideoReader(video_path[0], ctx=cpu(0))
         total_frame_num = len(vr)
-        uniform_sampled_frames = np.linspace(0, total_frame_num - 1, max_frames_num, dtype=int)
-        frame_idx = uniform_sampled_frames.tolist()
+        if total_frame_num>max_frames_num:
+            
+            uniform_sampled_frames = np.linspace(0, total_frame_num - 1, max_frames_num, dtype=int)
+            frame_idx = uniform_sampled_frames.tolist()
+        else:
+            uniform_sampled_frames = np.linspace(0, total_frame_num - 1, total_frame_num, dtype=int)
+            frame_idx = uniform_sampled_frames.tolist()
+        print(len(frame_idx))
         spare_frames = vr.get_batch(frame_idx).asnumpy()
         return spare_frames  # (frames, height, width, channels)
 

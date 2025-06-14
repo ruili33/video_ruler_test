@@ -14,7 +14,7 @@ from loguru import logger as eval_logger
 
 from lmms_eval.tasks._task_utils.file_utils import generate_submission_file
 
-LENGTH = [1,30,60,120,180,300,600,1200,1800,3600]
+LENGTH = [5,30,60,120,180,300,600,1200,1800,3600,7200,10800,18000]
 TASK_CATEGORIES = ["QA","OCR"]
 
 
@@ -53,7 +53,8 @@ def convert_time_to_frame(time_in_seconds, fps):
 
 
 def videoruler_doc_to_visual(doc):
-    cache_dir = os.path.join(base_cache_dir, cache_name,'datasets--ruili0--video_testing_dataset/snapshots/c0825c7fa6047b11b51e68630e45f81730bec169')
+    cache_dir = os.path.join(base_cache_dir, cache_name,'datasets--ruili0--video_testing_dataset/snapshots/649aee01a47fa82ea9c6e5c944a69777c7029c9b')
+    # cache_dir='/pasteur/u/ruili/RULER/scripts/data/data_new_ytb_5s'
     video_path = doc["video"] 
     video_path = os.path.join(cache_dir, video_path)
     if os.path.exists(video_path):
@@ -97,10 +98,10 @@ def extract_characters_regex(s):
     for answer_prefix in answer_prefixes:
         s = s.replace(answer_prefix, "")
 
-    if len(s.split()) > 10 and not re.search("[ABCD]", s):
+    if len(s.split()) > 10 and not re.search("[ABCDEF]", s):
         return ""
 
-    matches = re.search(r"[ABCD]", s)
+    matches = re.search(r"[ABCDEF]", s)
     if matches is None:
         return ""
     return matches[0]
@@ -118,10 +119,10 @@ def extract_characters_regex(s):
     for answer_prefix in answer_prefixes:
         s = s.replace(answer_prefix, "")
 
-    if len(s.split()) > 10 and not re.search("[ABCD]", s):
+    if len(s.split()) > 10 and not re.search("[ABCDEF]", s):
         return ""
 
-    matches = re.search(r"[ABCD]", s)
+    matches = re.search(r"[ABCDEF]", s)
     if matches is None:
         return ""
     return matches[0]
@@ -175,9 +176,13 @@ def videoruler_aggregate_results(results):
     for result in results:
         task_type = result["task_type"]
         length=result['length']
+        # print(result)
         key = f"{length}_{task_type}"
+        # print(key)
         category2score[key]["answered"] += 1
+        # print(result["pred_answer"],result["answer"])
         category2score[key]["correct"] += result["pred_answer"].lower() == result["answer"].lower()
+    print(category2score)
     for  cur_key in category2score:
         length,task_type=cur_key.split("_")
         eval_logger.info(f"Evaluation on Video Length: {str(length)} and Task: {task_type}: {100 * category2score[cur_key]['correct'] / category2score[cur_key]['answered'] if category2score[cur_key]['answered'] > 0 else 0 : .1f}%")

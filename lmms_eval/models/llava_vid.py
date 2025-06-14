@@ -323,6 +323,7 @@ class LlavaVid(lmms):
             uniform_sampled_frames = np.linspace(0, total_frame_num - 1, sample_fps, dtype=int)
             frame_idx = uniform_sampled_frames.tolist()
             frame_time = [i / vr.get_avg_fps() for i in frame_idx]
+        print(len(frame_time))
         frame_time = ",".join([f"{i:.2f}s" for i in frame_time])
         spare_frames = vr.get_batch(frame_idx).asnumpy()
         # import pdb;pdb.set_trace()

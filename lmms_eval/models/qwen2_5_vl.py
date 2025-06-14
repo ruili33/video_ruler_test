@@ -81,7 +81,7 @@ class Qwen2_5_VL(lmms):
 
         # Prepare model loading arguments
         model_kwargs = {
-            "torch_dtype": "auto",
+            "torch_dtype": torch.bfloat16,
             "device_map": self.device_map,
         }
 
@@ -282,7 +282,10 @@ class Qwen2_5_VL(lmms):
             image_inputs, video_inputs = process_vision_info(batched_messages)
             if video_inputs is not None:
                 total_frames = video_inputs[0].shape[0]
+                # print(total_frames)
                 indices = np.linspace(0, total_frames - 1, self.max_num_frames, dtype=int)
+                indices = np.unique(indices)
+                # print(len(indices))
                 # Append the last frame index if not already included
                 if total_frames - 1 not in indices:
                     indices = np.append(indices, total_frames - 1)
@@ -293,7 +296,7 @@ class Qwen2_5_VL(lmms):
                 inputs = inputs.to("cuda")
             else:
                 inputs = inputs.to(self.device)
-
+            inputs=inputs.to(torch.bfloat16)
             # Set default generation kwargs
             default_gen_kwargs = {
                 "max_new_tokens": 128,
