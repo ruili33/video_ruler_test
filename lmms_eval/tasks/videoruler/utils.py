@@ -53,7 +53,7 @@ def convert_time_to_frame(time_in_seconds, fps):
 
 
 def videoruler_doc_to_visual(doc):
-    cache_dir = os.path.join(base_cache_dir, cache_name,'datasets--ruili0--video_testing_dataset/snapshots/649aee01a47fa82ea9c6e5c944a69777c7029c9b')
+    cache_dir = os.path.join(base_cache_dir, cache_name,'datasets--ruili0--video_testing_dataset/snapshots/4d1971ff30f5308171ded3c04789deb7953d424d')
     # cache_dir='/pasteur/u/ruili/RULER/scripts/data/data_new_ytb_5s'
     video_path = doc["video"] 
     video_path = os.path.join(cache_dir, video_path)
