@@ -15,7 +15,7 @@ from loguru import logger as eval_logger
 from lmms_eval.tasks._task_utils.file_utils import generate_submission_file
 
 LENGTH = [5,30,60,120,180,300,600,1200,1800,3600,7200,10800,18000]
-TASK_CATEGORIES = ["QA","OCR"]
+TASK_CATEGORIES = ["QA","OCR",'temporal']
 
 
 
@@ -145,7 +145,7 @@ def videoruler_process_results(doc, results):
     """
     pred = results[0]
     task_type = doc["type"]
-    if task_type=="QA":
+    if task_type=="QA" or task_type=="temporal":
         pred_ans = extract_characters_regex(pred)
     elif task_type=="OCR":
         pred_ans = re.sub(r'^\.+|\.+$', '', pred.replace("The answer is ","").split(" ")[0].split(":")[0].strip()) if pred else pred
